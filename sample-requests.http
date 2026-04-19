@@ -1,0 +1,99 @@
+### Create client
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "fullName": "Ivan Petrov",
+  "email": "ivan@example.com",
+  "phone": "+375291111111",
+  "role": "CLIENT"
+}
+
+### Create picker
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "fullName": "Olga Sidorova",
+  "email": "olga@example.com",
+  "phone": "+375292222222",
+  "role": "PICKER"
+}
+
+### Create product 1
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "Bananas",
+  "description": "Fresh bananas",
+  "price": 3.40,
+  "availableQuantity": 50,
+  "qualityStatus": "GOOD"
+}
+
+### Create product 2
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "Apples",
+  "description": "Red apples",
+  "price": 4.10,
+  "availableQuantity": 30,
+  "qualityStatus": "GOOD"
+}
+
+### Create order
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "clientId": 1,
+  "pickerId": 2,
+  "deliveryAddress": "Minsk, Nezavisimosti 10",
+  "comment": "Call if bananas look damaged",
+  "items": [
+    {"productId": 1, "quantity": 2},
+    {"productId": 2, "quantity": 3}
+  ]
+}
+
+### Change status
+PATCH http://localhost:8080/api/orders/1/status
+Content-Type: application/json
+
+{
+  "changedByUserId": 2,
+  "newStatus": "ASSEMBLING",
+  "comment": "Picker started assembling"
+}
+
+### Send chat message
+POST http://localhost:8080/api/orders/1/messages
+Content-Type: application/json
+
+{
+  "senderId": 2,
+  "message": "Bananas are too ripe. Can I replace them with premium bananas?"
+}
+
+### Create replacement proposal
+POST http://localhost:8080/api/orders/1/replacements
+Content-Type: application/json
+
+{
+  "originalProductId": 1,
+  "proposedProductId": 2,
+  "createdByUserId": 2,
+  "reason": "Original bananas do not meet quality requirements"
+}
+
+### Approve replacement
+PATCH http://localhost:8080/api/replacements/1/decision
+Content-Type: application/json
+
+{
+  "status": "APPROVED",
+  "clientComment": "Approved"
+}

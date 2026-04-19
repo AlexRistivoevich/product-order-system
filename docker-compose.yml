@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: grocery_mysql
+    environment:
+      MYSQL_DATABASE: grocery_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: grocery_user
+      MYSQL_PASSWORD: grocery_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: grocery_app
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/grocery_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: grocery_user
+      SPRING_DATASOURCE_PASSWORD: grocery_pass
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql_data:
